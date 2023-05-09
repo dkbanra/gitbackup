@@ -22,9 +22,9 @@ jobs:
 
       - name: Fetch Repository List
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+          curl -H "Authorization: Bearer $GITHUBTOKEN" \
           "https://api.github.com/user/repos?per_page=100" \
           | jq -r '.[] | .full_name' \
           > repositories.txt
