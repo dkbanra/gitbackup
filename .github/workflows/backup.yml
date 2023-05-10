@@ -2,7 +2,7 @@ name: Backup Repositories to S3
 
 on:
   schedule:
-    - cron: "* * * * *" 
+    - cron: "" 
 
 jobs: 
   backup:
@@ -39,7 +39,7 @@ jobs:
             echo "Backing up $repository..."
             git clone --depth 1 "https://github.com/$repository"
             zip -r "$repository.zip" "$repository"
-            aws s3 cp "$repository.zip" "s3://$shivvvv"
+            aws s3 cp "$repository.zip" "s3://$shivvvv/$repository.zip"
             rm -rf "$repository" "$repository.zip"
             echo "Backup of $repository completed."
           done < repositories.txt
