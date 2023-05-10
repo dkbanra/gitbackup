@@ -38,7 +38,7 @@ jobs:
           while IFS= read -r repository; do
             echo "Backing up $repository..."
             git clone --depth 1 "https://github.com/$repository"
-            zip -r "$repository.zip" "$repository"
+            zip -r "$repository.zip" "$repository"/*
             aws s3 cp "$repository.zip" "s3://shivvvv/$repository.zip"
             rm -rf "$repository" "$repository.zip"
             echo "Backup of $repository completed."
