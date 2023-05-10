@@ -2,7 +2,7 @@ name: Backup Repositories to S3
 
 on:
   schedule:
-    - cron: "" 
+    - cron: "* * * * *" 
 
 jobs: 
   backup:
@@ -35,7 +35,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           S3_BUCKET_NAME: shivvvv
         run: |
-          while IFS= read -r repository; do
+          while IFS= read -r repositories.txt; do
             echo "Backing up $repository..."
             git clone --depth 1 "https://github.com/$repository"
             zip -r "$repository.zip" "$repository"
