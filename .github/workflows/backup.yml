@@ -2,7 +2,7 @@ name: Backup Repositories
 
 on:
   schedule:
-    - cron: "* * * * *"  # Run once daily at midnight
+    - cron: "* * * * *"  # Run once daily at midnight 
 
 jobs:
   backup:
