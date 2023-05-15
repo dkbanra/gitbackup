@@ -2,7 +2,7 @@ name: Backup Repositories
 
 on:
   schedule:
-    - cron: "* * *  *"  # Run once daily at midnight 
+    - cron: "* * * * *"  # Run once daily at midnight 
 
 jobs:
   backup:
@@ -26,8 +26,10 @@ jobs:
               REPO_NAME=$(basename -s .git "$REPO_URL")
               echo "Cloning $REPO_NAME..."
               git clone --depth 1 "$REPO_URL"
+              cd "$REPO_NAME"
               echo "Zipping $REPO_NAME..."
-              zip -r "$REPO_NAME.zip" "$REPO_NAME"
+              zip -r "../$REPO_NAME.zip" .
+              cd ..
               echo "Moving $REPO_NAME.zip to destination repository..."
               cp "$REPO_NAME.zip" "$DEST_REPO"
               echo "Backup of $REPO_NAME completed."
