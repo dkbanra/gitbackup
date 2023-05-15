@@ -30,6 +30,5 @@ jobs:
               zip -r "$REPO_NAME.zip" "$REPO_NAME"
               echo "Moving $REPO_NAME.zip to destination repository..."
               cp "$REPO_NAME.zip" "$DEST_REPO"
-              rm -rf "$REPO_NAME" "$REPO_NAME.zip"
               echo "Backup of $REPO_NAME completed."
           done
