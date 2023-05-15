@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install awscli
+          sudo pip install awscli
           apt-get update && apt-get install -y zip
 
       - name: Clone and Zip Repositories
