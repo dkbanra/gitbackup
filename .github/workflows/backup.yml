@@ -2,7 +2,7 @@ name: Backup Repositories to S3
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Run once daily at midnight
+    - cron: "* * * * *"  # Run once daily at midnight
 
 jobs:
   backup:
