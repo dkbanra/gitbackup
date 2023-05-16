@@ -38,7 +38,7 @@ jobs:
               echo "Zipping $REPO_NAME..."
               zip -r "../$REPO_NAME.zip" .
               echo "Uploading $REPO_NAME.zip to S3..."
-              aws s3 cp "../$REPO_NAME.zip" "s3://$shivvv/$REPO_NAME.zip"
+              aws s3 cp "../$REPO_NAME.zip" "s3://$shivvvv/$REPO_NAME.zip"
               cd ..
               echo "Backup of $REPO_NAME completed."
           done
