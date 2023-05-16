@@ -1,8 +1,8 @@
-name: Backup Repositories
+name: Backup Repositories to S3
 
 on:
   schedule:
-    - cron: "* * * * *"  # Run once daily at midnight 
+    - cron: "0 0 * * *"  # Run once daily at midnight
 
 jobs:
   backup:
@@ -17,20 +17,28 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Clone and Zip Repositories
-        env:
-          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
-          DEST_REPO: "destination"
+      - name: Install AWS CLI
         run: |
-          curl -s -H "Authorization: token $GITHUBTOKEN" "https://api.github.com/users/dkbanra/repos?per_page=100" | jq -r '.[].clone_url' | while IFS= read -r REPO_URL; do
+          sudo apt-get install -y unzip
+          curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      - name: Clone and Backup Repositories to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET_NAME: "your-s3-bucket-name"
+        run: |
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/dkbanra/repos?per_page=100" | jq -r '.[].clone_url' | while IFS= read -r REPO_URL; do
               REPO_NAME=$(basename -s .git "$REPO_URL")
               echo "Cloning $REPO_NAME..."
               git clone --depth 1 "$REPO_URL"
               cd "$REPO_NAME"
               echo "Zipping $REPO_NAME..."
               zip -r "../$REPO_NAME.zip" .
+              echo "Uploading $REPO_NAME.zip to S3..."
+              aws s3 cp "../$REPO_NAME.zip" "s3://$shivvv/$REPO_NAME.zip"
               cd ..
-              echo "Moving $REPO_NAME.zip to destination repository..."
-              cp "$REPO_NAME.zip" "$DEST_REPO"
               echo "Backup of $REPO_NAME completed."
           done
